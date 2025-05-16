@@ -1,5 +1,7 @@
 package org.example.ussd;
 
+import static org.example.ussd.MainMenuService.readLineWithTimeout;
+
 import java.util.Scanner;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +11,7 @@ public class SosCreditMenuService {
     while (true) {
       System.out.println("\nSOS CREDIT\n1. SOS Credit à YAS\n2. Rembourser SOS\nX. Retour");
       System.out.print("Choix: ");
-      String choice = scanner.nextLine();
+      String choice = readLineWithTimeout(scanner, 10);
       switch (choice) {
         case "1" -> handleSosCredit(scanner, session);
         case "2" -> handleRemboursement(scanner, session);
@@ -27,7 +29,7 @@ public class SosCreditMenuService {
       return;
     }
     System.out.println("1. 500 AR\n2. 1000 AR\n3. 2000 AR");
-    String montant = scanner.nextLine();
+    String montant = readLineWithTimeout(scanner, 10);
     int montantInt =
         switch (montant) {
           case "1" -> 500;

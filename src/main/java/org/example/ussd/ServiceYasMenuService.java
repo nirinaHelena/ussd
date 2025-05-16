@@ -1,5 +1,7 @@
 package org.example.ussd;
 
+import static org.example.ussd.MainMenuService.readLineWithTimeout;
+
 import java.util.Scanner;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,7 @@ SERVICE YAS
 X. Retour""");
 
       System.out.print("Choix: ");
-      String choice = scanner.nextLine();
+      String choice = readLineWithTimeout(scanner, 10);
       switch (choice) {
         case "1" -> {
           System.out.println("Solde YAS : " + session.soldeYas + " AR");
@@ -27,7 +29,7 @@ X. Retour""");
         case "2" -> {
           System.out.print("Entrez le montant (AR) : ");
           try {
-            int montant = Integer.parseInt(scanner.nextLine());
+            int montant = Integer.parseInt(readLineWithTimeout(scanner, 10));
             session.soldeYas += montant;
             System.out.println("Recharge réussie. Nouveau solde : " + session.soldeYas + " AR");
           } catch (NumberFormatException e) {
@@ -36,7 +38,7 @@ X. Retour""");
         }
         case "6" -> {
           System.out.println("1. 100Mo – 1 000 AR\n2. Appel illimité – 5 000 AR");
-          String opt = scanner.nextLine();
+          String opt = readLineWithTimeout(scanner, 10);
           int prix = opt.equals("1") ? 1000 : opt.equals("2") ? 5000 : 0;
           if (prix > 0 && session.soldeYas >= prix) {
             session.soldeYas -= prix;

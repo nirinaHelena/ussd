@@ -1,5 +1,7 @@
 package org.example.ussd;
 
+import static org.example.ussd.MainMenuService.readLineWithTimeout;
+
 import java.util.Scanner;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,7 @@ public class MvolaMenuService {
               + "5. Mon compte\n"
               + "X. Retour");
       System.out.print("Choix: ");
-      String choice = scanner.nextLine();
+      String choice = readLineWithTimeout(scanner, 10);
       switch (choice) {
         case "1" -> acheterCreditYas(scanner);
         case "2" -> transfertArgent(scanner);
@@ -38,7 +40,7 @@ public class MvolaMenuService {
   private void acheterCreditYas(Scanner scanner) {
     System.out.print("Montant à acheter (AR) : ");
     try {
-      int montant = Integer.parseInt(scanner.nextLine());
+      int montant = Integer.parseInt(readLineWithTimeout(scanner, 10));
       if (montant <= soldeMvola) {
         soldeMvola -= montant;
         System.out.println(
@@ -53,10 +55,10 @@ public class MvolaMenuService {
 
   private void transfertArgent(Scanner scanner) {
     System.out.print("Numéro destinataire : ");
-    String destinataire = scanner.nextLine();
+    String destinataire = readLineWithTimeout(scanner, 10);
     System.out.print("Montant à transférer (AR) : ");
     try {
-      int montant = Integer.parseInt(scanner.nextLine());
+      int montant = Integer.parseInt(readLineWithTimeout(scanner, 10));
       if (montant <= soldeMvola) {
         soldeMvola -= montant;
         System.out.println(
@@ -77,7 +79,7 @@ public class MvolaMenuService {
   private void retraitArgent(Scanner scanner) {
     System.out.print("Montant à retirer (AR) : ");
     try {
-      int montant = Integer.parseInt(scanner.nextLine());
+      int montant = Integer.parseInt(readLineWithTimeout(scanner, 10));
       if (montant <= soldeMvola) {
         soldeMvola -= montant;
         System.out.println(
