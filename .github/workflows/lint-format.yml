@@ -1,0 +1,41 @@
+name: Lint and Format
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Download google-java-format
+        run: |
+          mkdir -p config
+          curl -L -o config/google-java-format.jar https://github.com/google/google-java-format/releases/download/v1.23.0/google-java-format-1.23.0-all-deps.jar
+
+      - name: Download checkstyle
+        run: |
+          curl -L -o config/checkstyle.jar https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.12.3/checkstyle-10.12.3-all.jar
+
+      - name: Copy google_checks.xml
+        run: cp config/google_checks.xml config/google_checks.xml
+
+      - name: Run google-java-format
+        run: |
+          find src -name "*.java" -exec java -jar config/google-java-format.jar --replace {} \;
+
+      - name: Run Checkstyle
+        run: |
+          java -jar config/checkstyle.jar -c config/google_checks.xml src
